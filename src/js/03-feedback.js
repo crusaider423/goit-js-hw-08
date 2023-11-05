@@ -5,7 +5,6 @@ formRef.addEventListener('input', throttle(onFormInput, 500));
 formRef.addEventListener('submit', onSubmit);
 
 function onFormInput(e) {
-  console.log(e);
   if (e.currentTarget === null) {
     return;
   }
@@ -18,12 +17,16 @@ function onFormInput(e) {
   );
 }
 
-const locStorGet = localStorage.getItem('feedback-form-state');
-
-if (locStorGet !== null) {
+function foo() {
+  const locStorGet = localStorage.getItem('feedback-form-state');
+  if (locStorGet === null) {
+    return;
+  }
   const locStorPars = JSON.parse(locStorGet);
+
   formRef.elements.email.value = locStorPars.email;
   formRef.elements.message.value = locStorPars.message;
+  return locStorPars;
 }
 
 function onSubmit(e) {
@@ -32,7 +35,9 @@ function onSubmit(e) {
   if (!(e.target.elements.email.value && e.target.elements.message.value)) {
     return;
   }
-  console.log(JSON.parse(locStorGet));
+
+  console.log(foo());
   e.target.reset();
   localStorage.removeItem('feedback-form-state');
 }
+foo();
